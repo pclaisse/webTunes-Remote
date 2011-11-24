@@ -70,6 +70,11 @@ case "position";
 echo exec("osascript '/Applications/MAMP/htdocs/webtunes/scpts/current_position.scpt'");
 break;
 
+case "set_position";
+if(!empty($p[0]))
+  exec("osascript -e 'tell app \"iTunes\" to set player position to " . $p[0] . "'");
+break;
+
 case "duration";
 echo exec("osascript '/Applications/MAMP/htdocs/webtunes/scpts/current_duration.scpt'");
 break;

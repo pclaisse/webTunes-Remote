@@ -178,7 +178,8 @@ var setTrackPosition = function() {
     var progress = Math.round(currentTime.position / currentDuration.position * 100);
   }
   
-  $('.player .toolbar .info-window .window #track-bar div').width(progress + '%');
+  $('.player .toolbar .info-window .window #track-bar div').width(progress + '%').data('position', (currentTime.position != 'missing value' ? currentTime.position : 0));
+  $('.player .toolbar .info-window .window #track-bar').data('duration', (currentDuration.position != 'missing value' ? currentDuration.position : 0));
   
 }
 
@@ -198,6 +199,24 @@ var setClickEvents = function() {
   
   $('.player .toolbar .circle-button#next').click(function() {
     $.get('/webtunes/cmd.php?q=next');
+  });
+  
+  $('.player .toolbar #track-bar').click(function(e) {
+      
+      var pos = $(this).position();
+      var duration = $('.player .toolbar .info-window .window #track-bar').data('duration');
+      
+      if(parseInt(duration) > 0) {
+        
+        var clicked_percent  = Math.floor((e.pageX-pos.left)*100/$(this).width());
+        var clicked_position = Math.floor(duration/100*clicked_percent);
+        
+        $.get('/webtunes/cmd.php?q=set_position&p[]=' + clicked_position, function() {
+            $('.player .toolbar .info-window .window #track-bar div').width(clicked_percent + '%')
+        });
+        
+      }
+      
   });
   
 };
