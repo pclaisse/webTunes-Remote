@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <title>iTunes Remote</title>
+    <meta name="application-name" content="iTunes Remote"/>
+    <meta name="description" content="Webbased iTunes Remote for Mac"/>
+    <meta name="application-url" content="http://www.pnkz.biz/itunes"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="shortcut icon" href="/webtunes/images/icon_16x16.png" type="image/png" />
+    <link rel="icon" href="/webtunes/images/icon_16x16.png" sizes="16x16"/>
+    <link rel="icon" href="/webtunes/images/icon_32x32.png" sizes="32x32"/>
+    <link rel="icon" href="/webtunes/images/icon_46x46.png" sizes="46x46"/>
+    <link rel="stylesheet" href="/webtunes/custom.css" type="text/css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/webtunes/js/data.dev.js"></script>
+  </head>
+  <body>
+    <div class="player">
+      <div class="toolbar">
+        <div class="controll-tools">
+          <div style="width: 50%; float: left;">
+            <div id="prev" class="circle-button rewind-button"></div>
+            <div id="playpause" class="circle-button play-button"></div>
+            <div id="next" class="circle-button forward-button"></div>
+          </div>
+          <div style="width: 50%; float: left;">
+            <div id="volume">
+              <div id="volume-bar" class="grey-bar volume-bar"></div>
+            </div>
+          </div>
+        </div>
+        <div class="info-window">
+          <div class="window">
+            <div id="title">-</div>
+            <div id="artist-album">-</div>
+            <div id="track-progress">
+              <div id="track-position">0:00</div>
+              <div id="track-bar">
+                <div style="width: 0%;"></div>
+              </div>
+              <div id="track-duration">0:00</div>
+            </div>
+          </div>
+        </div>
+        <div class="display-tools"></div>
+        <div class="searchbar"></div>
+      </div>
+      <div class="main">
+        <div class="sidebar playlists">
+          <ul></ul>
+        </div>
+        <div class="content tracklist">
+          <table cellspacing="0" cellspacing="0" border="0">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Artist</th>
+                <th>Album</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!--
+    <div id="track"></div>
+    <div id="progress" style="width: 200px; background: #ccc; border: 1px solid #666; border-radius: 3px; height: 10px; float: left; margin: 5px 10px 5px 0px;">
+      <div id="bar" style="width: 0%; height: 10px; background: lightblue;"></div>
+    </div>
+    <div id="time" style="float: left;"></div>-->
+  </body>
+</html>
