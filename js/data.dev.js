@@ -255,4 +255,16 @@ $(document).ready(function() {
     window.setInterval(getTrackInfo, 5000);
     window.setInterval(getCurrentPosition, 1000);
     
+    //var overlay = $('<div style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></div>');
+    //
+    //overlay.append('<div style="width: 150px; height: 150px; position: absolute; top: 50%; left: 50%; margin-left: -75px; margin-top: -75px; opacity: 0.5; background-color: black; border-radius: 5px; z-index: 10;"></div>');
+    //var overlay_box = $('<div style="width: 150px; height: 150px; position: absolute; top: 50%; left: 50%; margin-left: -75px; margin-top: -75px; z-index: 20;"></div>');
+    //
+    //overlay_box.append('<img src="" border="0" />');
+    //overlay_box.append('<div style="color: white; text-shadow: 0px 1px 0px rgba(0,0,0,1);">Overlay Box</div>');
+    //
+    //overlay.append(overlay_box);
+    //
+    //$('.player').prepend(overlay);
+    
 });

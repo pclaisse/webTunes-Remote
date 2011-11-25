@@ -213,7 +213,6 @@ cursor: pointer;
 }
 
 .player .toolbar .circle-button#prev {
-margin-left: 30px;
 }
 
 .player .toolbar .circle-button.play-button {
@@ -335,6 +334,7 @@ text-shadow: 0px 1px 0px rgba(0,0,0,0.4);
 
 .player .main .sidebar ul .active-playlist span {
 background-position: 8px -16px;
+font-weight: bold;
 }
 
 .player .main .content table tbody tr:hover td {

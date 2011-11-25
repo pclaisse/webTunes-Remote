@@ -18,14 +18,18 @@
     <div class="player">
       <div class="toolbar">
         <div class="controll-tools">
-          <div style="width: 50%; float: left;">
-            <div id="prev" class="circle-button rewind-button"></div>
-            <div id="playpause" class="circle-button play-button"></div>
-            <div id="next" class="circle-button forward-button"></div>
+          <div style="width: 50%; float: left; position: relative; height: 50px;">
+            <div style="position: absolute; left: 50%; width: 150px; margin-left: -75px;">
+              <div id="prev" class="circle-button rewind-button"></div>
+              <div id="playpause" class="circle-button play-button"></div>
+              <div id="next" class="circle-button forward-button"></div>
+            </div>
           </div>
-          <div style="width: 50%; float: left;">
-            <div id="volume">
-              <div id="volume-bar" class="grey-bar volume-bar"></div>
+          <div style="width: 50%; float: left; position: relative; height: 50px;">
+            <div style="position: absolute; left: 50%; width: 150px; margin-left: -75px;">
+              <div id="volume">
+                <div id="volume-bar" class="grey-bar volume-bar"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -65,11 +69,5 @@
         </div>
       </div>
     </div>
-    <!--
-    <div id="track"></div>
-    <div id="progress" style="width: 200px; background: #ccc; border: 1px solid #666; border-radius: 3px; height: 10px; float: left; margin: 5px 10px 5px 0px;">
-      <div id="bar" style="width: 0%; height: 10px; background: lightblue;"></div>
-    </div>
-    <div id="time" style="float: left;"></div>-->
   </body>
 </html>
