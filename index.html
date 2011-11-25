@@ -5,31 +5,33 @@
     <meta name="description" content="Webbased iTunes Remote for Mac"/>
     <meta name="application-url" content="http://www.pnkz.biz/webtunes"/>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <link rel="shortcut icon" href="/webtunes/images/icon_16x16.png" type="image/png" />
-    <link rel="icon" href="/webtunes/images/icon_16x16.png" sizes="16x16"/>
-    <link rel="icon" href="/webtunes/images/icon_32x32.png" sizes="32x32"/>
-    <link rel="icon" href="/webtunes/images/icon_46x46.png" sizes="46x46"/>
-    <link rel="stylesheet" href="/webtunes/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="images/icon_16x16.png" type="image/png" />
+    <link rel="icon" href="images/icon_16x16.png" sizes="16x16"/>
+    <link rel="icon" href="images/icon_32x32.png" sizes="32x32"/>
+    <link rel="icon" href="images/icon_46x46.png" sizes="46x46"/>
+    <link rel="stylesheet" href="custom.css" type="text/css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/webtunes/js/data.dev.js"></script>
+    <script type="text/javascript" src="js/data.dev.js"></script>
   </head>
   <body>
     <div class="player">
       <div class="toolbar">
         <div class="controll-tools">
           <div style="width: 50%; float: left; position: relative; height: 50px;">
-            <div style="position: absolute; left: 50%; width: 150px; margin-left: -75px;">
+            <div style="position: absolute; left: 50%; width: 130px; margin-left: -65px;">
               <div id="prev" class="circle-button rewind-button"></div>
               <div id="playpause" class="circle-button play-button"></div>
               <div id="next" class="circle-button forward-button"></div>
             </div>
           </div>
           <div style="width: 50%; float: left; position: relative; height: 50px;">
-            <div style="position: absolute; left: 50%; width: 150px; margin-left: -75px;">
+            <div style="position: absolute; left: 50%; width: 160px; margin-left: -80px;">
+              <div id="mute-volume"></div>
               <div id="volume">
                 <div id="volume-bar" class="grey-bar volume-bar"></div>
               </div>
+              <div id="full-volume"></div>
             </div>
           </div>
         </div>

@@ -168,7 +168,7 @@ margin: 6px 12px;
 position: relative;
 width: 100px;
 height: 24px;
-margin: 10px 0px;
+margin: 10px 24px 10px 0px;
 float: left;
 }
 
@@ -184,8 +184,20 @@ background: transparent url('images/MetalToggle.png') left top no-repeat;
 }
 
 .player .toolbar #volume .ui-slider-handle:focus {
-  outline: 0;
-  border: 0;
+outline: 0;
+border: 0;
+}
+
+.player .toolbar #mute-volume, .player .toolbar #full-volume {
+background: transparent url('images/Volume.png') no-repeat top left;
+width: 16px;
+height: 16px;
+margin: 13px 0px;
+float: left;
+}
+
+.player .toolbar #mute-volume {
+background-position: left -16px;
 }
 
 .player .toolbar .info-window .window #track-duration {
@@ -210,6 +222,7 @@ cursor: pointer;
 }
 
 .player .toolbar .circle-button:active {
+  margin-top: 3px;
 }
 
 .player .toolbar .circle-button#prev {

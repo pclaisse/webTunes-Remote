@@ -1,4 +1,4 @@
-var currentTrack = "", currentPos = 0, currentDuration = 0, currentPlaylist = "";
+var currentTrack = "", currentPos = 0, currentDuration = 0, currentPlaylist = "". currentVolume = 0, hideOverlay = null;
 
 var getTime = function(pos) {
   
@@ -25,7 +25,7 @@ var getTime = function(pos) {
 };
 
 var getAllPlaylists = function() {
-  $.get('/webtunes/cmd.php?q=all_playlists', function(all) {
+  $.get('cmd.php?q=all_playlists', function(all) {
     var playlists = all.split(";#;");
     var sidebar_width = $('.player .main .sidebar').outerWidth();
     var l = 1, scrollTo = 1;
@@ -52,7 +52,7 @@ var getAllPlaylists = function() {
     });
     
     $('.player .main .sidebar .playlist').click(function() {
-      $.get('/webtunes/cmd.php?q=playtrack&p[]=1&p[]=' + encodeURI($(this).data('playlist')));
+      $.get('cmd.php?q=playtrack&p[]=1&p[]=' + encodeURI($(this).data('playlist')));
     });
     
     window.location = '#' + (scrollTo - 2);
@@ -61,7 +61,7 @@ var getAllPlaylists = function() {
 };
 
 var getPlaylist = function() {
-  $.get('/webtunes/cmd.php?q=playlist', function(playlist) {
+  $.get('cmd.php?q=playlist', function(playlist) {
       
       playlist = playlist.substr(0, (playlist.length - 3));
         $('.player .main .tracklist table tbody').html("");
@@ -104,24 +104,24 @@ var getPlaylist = function() {
       }
       
       $('.player .main .tracklist .track').click(function() {
-        $.get('/webtunes/cmd.php?q=playtrack&p[]=' + $(this).data('track-no') + '&p[]=' + encodeURI($(this).data('playlist')));
+        $.get('cmd.php?q=playtrack&p[]=' + $(this).data('track-no') + '&p[]=' + encodeURI($(this).data('playlist')));
       });
       
   });
 };
 
 var getTrackInfo = function() {
-  $.get('/webtunes/cmd.php?q=info', function(track) {
+  $.get('cmd.php?q=info', function(track) {
       currentTrack = track.split('|');
       setTrackInfo();
   });
-  $.get('/webtunes/cmd.php?q=duration', function(duration) {
+  $.get('cmd.php?q=duration', function(duration) {
       currentDuration = getTime(duration);
   });
 };
 
 var getCurrentPosition = function() {
-  $.get('/webtunes/cmd.php?q=position', function(pos) {
+  $.get('cmd.php?q=position', function(pos) {
       
       if(currentPos > pos) {
         getTrackInfo();
@@ -190,15 +190,15 @@ var setClickEvents = function() {
       $('.player .toolbar .circle-button#playpause').removeClass('play-button').addClass('pause-button');
     else
       $('.player .toolbar .circle-button#playpause').removeClass('pause-button').addClass('play-button');
-    $.get('/webtunes/cmd.php?q=playpause');
+    $.get('cmd.php?q=playpause');
   });
   
   $('.player .toolbar .circle-button#prev').click(function() {
-    $.get('/webtunes/cmd.php?q=prev');
+    $.get('cmd.php?q=prev');
   });
   
   $('.player .toolbar .circle-button#next').click(function() {
-    $.get('/webtunes/cmd.php?q=next');
+    $.get('cmd.php?q=next');
   });
   
   $('.player .toolbar #track-bar').click(function(e) {
@@ -211,9 +211,56 @@ var setClickEvents = function() {
         var clicked_percent  = Math.floor((e.pageX-pos.left)*100/$(this).width());
         var clicked_position = Math.floor(duration/100*clicked_percent);
         
-        $.get('/webtunes/cmd.php?q=set_position&p[]=' + clicked_position, function() {
+        $.get('cmd.php?q=set_position&p[]=' + clicked_position, function() {
             $('.player .toolbar .info-window .window #track-bar div').width(clicked_percent + '%')
         });
+        
+      }
+      
+  });
+  
+  $('.player .toolbar #mute-volume').click(function() {
+      $.get('cmd.php?q=volume&p[]=0', function() {
+        $( ".player .volume-bar" ).slider('value', 0);
+      });
+  });
+  
+  
+  $('.player .toolbar #full-volume').click(function() {
+      $.get('cmd.php?q=volume&p[]=100', function() {
+        $( ".player .volume-bar" ).slider('value', 100);
+      });
+  });
+  
+  
+};
+
+
+var setKeyEvents = function() {
+  
+  $(document).keyup(function(e) {
+      
+      if(e.altKey) {
+        
+        switch(e.keyCode) {
+          case 107:
+          case 187:
+            var vol = (currentVolume <= 90 ? (currentVolume + 10) : 100);
+            $.get('cmd.php?q=volume&p[]=' + vol, function() {
+              setVolumeOverlay(vol);
+              $( ".player .volume-bar" ).slider('value', vol);
+            });
+            break;
+          case 109:
+          case 189:
+            var vol = (currentVolume >= 10 ? (currentVolume - 10) : 0);
+            $.get('cmd.php?q=volume&p[]=' + vol, function() {
+              setVolumeOverlay(vol);
+              $( ".player .volume-bar" ).slider('value', vol);
+            });
+            break;
+          
+        };
         
       }
       
@@ -223,7 +270,9 @@ var setClickEvents = function() {
 
 var getVolumeProgress = function() {
   
-  $.get('/webtunes/cmd.php?q=volume', function(volume) {
+  $.get('cmd.php?q=volume', function(volume) {
+    
+    currentVolume = volume;
     
     $( ".player .volume-bar" ).slider({
         range: "min",
@@ -240,7 +289,48 @@ var getVolumeProgress = function() {
 };
 
 var setVolumeProgress = function(volume) {
-  $.get('/webtunes/cmd.php?q=volume&p[]=' + volume);
+  $.get('cmd.php?q=volume&p[]=' + volume, function() {
+      currentVolume = volume;
+  });
+};
+
+
+var setVolumeOverlay = function(volume) {
+  
+  if(typeof volume == 'undefined')
+    volume = 0;
+  
+  if($('.player .overlay').length > 0) {
+    
+    var overlay = $('.player .overlay');
+    window.clearTimeout(hideOverlay);
+    overlay.stop().fadeIn(0);;
+    
+    overlay.find('.volume-progress').css('width', volume + '%');
+    
+  } else {
+    
+    var overlay = $('<div class="overlay" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></div>');
+    
+    overlay.append('<div style="width: 150px; height: 150px; position: absolute; top: 70%; left: 50%; margin-left: -75px; margin-top: -75px; opacity: 0.3; background-color: black; border-radius: 5px; z-index: 10;"></div>');
+    var overlay_box = $('<div style="width: 120px; height: 120px; position: absolute; top: 70%; left: 50%; margin-left: -60px; margin-top: -60px; z-index: 20; text-align: center;"></div>');
+    
+    overlay_box.append('<img src="images/VolumeOverlay.png" border="0" />');
+    overlay_box.append('<div class="volume-progress" style="background: transparent url(\'images/VolumePogressOverlay.png\') repeat-x left top; width: ' + volume + '%; height: 8px; position: absolute; bottom:  0px; z-index: 10;"></div>');
+    overlay_box.append('<div class="volume-size"     style="background: transparent url(\'images/VolumePogressInactiveOverlay.png\') repeat-x left top; width: 100%; height: 8px; position: absolute; bottom: 0px; z-index: 5;"></div>');
+    
+    overlay.append(overlay_box);
+    
+    $('.player').prepend(overlay);
+    
+  }
+  
+  hideOverlay = window.setTimeout(function() {
+    overlay.fadeOut('slow', function() {
+        $(this).remove();
+    });
+  }, 1000);
+  
 };
 
 $(document).ready(function() {
@@ -250,21 +340,10 @@ $(document).ready(function() {
     getAllPlaylists();
     
     setClickEvents();
+    setKeyEvents();
     getVolumeProgress();
     
     window.setInterval(getTrackInfo, 5000);
     window.setInterval(getCurrentPosition, 1000);
-    
-    //var overlay = $('<div style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></div>');
-    //
-    //overlay.append('<div style="width: 150px; height: 150px; position: absolute; top: 50%; left: 50%; margin-left: -75px; margin-top: -75px; opacity: 0.5; background-color: black; border-radius: 5px; z-index: 10;"></div>');
-    //var overlay_box = $('<div style="width: 150px; height: 150px; position: absolute; top: 50%; left: 50%; margin-left: -75px; margin-top: -75px; z-index: 20;"></div>');
-    //
-    //overlay_box.append('<img src="" border="0" />');
-    //overlay_box.append('<div style="color: white; text-shadow: 0px 1px 0px rgba(0,0,0,1);">Overlay Box</div>');
-    //
-    //overlay.append(overlay_box);
-    //
-    //$('.player').prepend(overlay);
     
 });
