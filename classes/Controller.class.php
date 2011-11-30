@@ -94,6 +94,11 @@ class Controller extends Configuration {
   }
   
   
+  public function getArtwork($track = '', $list = '') {
+    return $this->itunes->getArtwork($track, $list);
+  }
+  
+  
   public function run() {
     
     if(empty($this->cmd))
@@ -105,7 +110,7 @@ class Controller extends Configuration {
         break;
         
       case "playtrack";
-        $this->itunes->playTrack($this->params[0], $this->params[1]);
+        $this->itunes->playTrack($this->params[0], (!empty($this->params[1]) ? $this->params[1] : null));
         break;
       
       case "playtrack_current";
@@ -157,6 +162,10 @@ class Controller extends Configuration {
       
       case "all_playlists";
         echo $this->itunes->getPlaylists();
+        break;
+        
+      case "search";
+        echo $this->itunes->getSearch($this->params[0], (!empty($this->params[1]) ? $this->params[1] : null));
         break;
       
       default:

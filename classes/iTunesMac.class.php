@@ -169,6 +169,28 @@ class iTunesMac {
   
   
   /**
+   * getSearch
+   *
+   * @access  public
+   * @return  mixed
+   */
+  public function getSearch($search = '', $playlist = '') {
+    return $this->executeFile('search_playlist.scpt', "'" . $search . "'" . (!empty($playlist) ? " '" . $playlist . "'" : null));
+  }
+  
+  
+  /**
+   * getArtwork
+   *
+   * @access  public
+   * @return  mixed
+   */
+  public function getArtwork($track = '', $playlist = '') {
+    return $this->executeFile('track_artwork.scpt', "'" . substr(str_replace('/', ':', WT_DOC_PATH), 1) . "' '" . $track . "'" . (!empty($playlist) ? " '" . $playlist . "'" : null));
+  }
+  
+  
+  /**
    * execute
    *
    * @access  private
@@ -185,10 +207,10 @@ class iTunesMac {
    * @access  private
    * @return  mixed
    */
-  private function executeFile($file = '') {
+  private function executeFile($file = '', $params = '') {
     
     if(is_readable(WT_DOC_PATH . '/scpts/' . $file))
-      return exec("osascript '" . WT_DOC_PATH . '/scpts/' . $file . "'");
+      return exec("osascript '" . WT_DOC_PATH . '/scpts/' . $file . "'" . (!empty($params) ? " " . $params : null));
     
     return false;
     

@@ -1,4 +1,4 @@
-var currentTrack = "", currentPos = 0, currentDuration = 0, currentPlaylist = "". currentVolume = 0, hideOverlay = null;
+var currentTrack = "", currentPos = 0, currentDuration = 0, currentPlaylist = "". currentVolume = 0, hideOverlay = null, view = 'list';
 
 var getTime = function(pos) {
   
@@ -60,6 +60,74 @@ var getAllPlaylists = function() {
   });
 };
 
+var setCoverView = function(tracks) {
+
+  var i = 1;
+  var _tracks = {};
+  
+  $.each(tracks, function(key, track) {
+    var singleTrack = track.split("|");
+    _tracks[singleTrack[2]] = singleTrack;
+  });
+  
+  $.each(_tracks, function(album, track) {
+  
+    var trackBox = $('<div />');
+    
+    trackBox.addClass('artwork-box');
+    
+    trackBox.append('<img src="img.php?track=' + track[1] + '&list=' + track[3] +'" border="0" />');
+    
+    $('.player .main .tracklist table tbody').append(trackBox);
+    
+  });
+  
+
+};
+
+
+var setListView = function(tracks) {
+  
+  var i = 1;
+  
+  $.each(tracks, function(key, track) {
+        
+    var singleTrack = track.split("|");
+    var trackLn = $('<tr />');
+    
+    if(i%2 == 1)
+      trackLn.addClass('odd');
+    
+    trackLn.addClass('track');
+    
+    if(singleTrack[1] == currentTrack[1])
+      trackLn.addClass('active-track');
+    
+    trackLn.data('playlist', currentPlaylist);
+    trackLn.data('track-no', i);
+    
+    trackLn.append('<td class="track-no">' + (i++) + '</td>');
+    trackLn.append('<td class="track-name">' + singleTrack[1] + '</td>');
+    trackLn.append('<td class="track-artist">' + singleTrack[0] + '</td>');
+    trackLn.append('<td class="track-album">' + singleTrack[2] + '</td>');
+    
+    $('.player .main .tracklist table tbody').append(trackLn);
+    
+  });
+  
+  if($('.player .sidebar ul li.active-playlist').length > 0 && $('.player .sidebar ul li.active-playlist').attr('title') != currentPlaylist) {
+    $('.player .sidebar ul li.active-playlist').removeClass('active-playlist');
+    var scrollTo = $('.player .sidebar ul li[title="' + currentPlaylist + '"]').addClass('active-playlist').attr('id');
+    window.location = '#' + (scrollTo - 1);
+  }
+  
+  $('.player .main .tracklist .track').click(function() {
+    $.get('cmd.php?q=playtrack&p[]=' + $(this).data('track-no') + '&p[]=' + encodeURI($(this).data('playlist')));
+  });
+
+};
+
+
 var getPlaylist = function() {
   $.get('cmd.php?q=playlist', function(playlist) {
       
@@ -67,45 +135,18 @@ var getPlaylist = function() {
         $('.player .main .tracklist table tbody').html("");
       
       var tracks = playlist.split(";#;");
-      var i = 1;
       
       currentPlaylist = tracks[0].split("|");
       currentPlaylist = currentPlaylist[3];
       
-      $.each(tracks, function(key, track) {
-        
-        var singleTrack = track.split("|");
-        var trackLn = $('<tr />');
-        
-        if(i%2 == 1)
-          trackLn.addClass('odd');
-        
-        trackLn.addClass('track');
-        
-        if(singleTrack[1] == currentTrack[1])
-          trackLn.addClass('active-track');
-        
-        trackLn.data('playlist', currentPlaylist);
-        trackLn.data('track-no', i);
-        
-        trackLn.append('<td class="track-no">' + (i++) + '</td>');
-        trackLn.append('<td class="track-name">' + singleTrack[1] + '</td>');
-        trackLn.append('<td class="track-artist">' + singleTrack[0] + '</td>');
-        trackLn.append('<td class="track-album">' + singleTrack[2] + '</td>');
-        
-        $('.player .main .tracklist table tbody').append(trackLn);
-        
-      });
-      
-      if($('.player .sidebar ul li.active-playlist').length > 0 && $('.player .sidebar ul li.active-playlist').attr('title') != currentPlaylist) {
-        $('.player .sidebar ul li.active-playlist').removeClass('active-playlist');
-        var scrollTo = $('.player .sidebar ul li[title="' + currentPlaylist + '"]').addClass('active-playlist').attr('id');
-        window.location = '#' + (scrollTo - 1);
+      switch(view) {
+        case 'cover':
+          setCoverView(tracks);
+          break;
+        default:
+          setListView(tracks);
+          break;
       }
-      
-      $('.player .main .tracklist .track').click(function() {
-        $.get('cmd.php?q=playtrack&p[]=' + $(this).data('track-no') + '&p[]=' + encodeURI($(this).data('playlist')));
-      });
       
   });
 };
@@ -345,5 +386,12 @@ $(document).ready(function() {
     
     window.setInterval(getTrackInfo, 5000);
     window.setInterval(getCurrentPosition, 1000);
+    
+    // Search
+    //$('.player .searchbar form').submit(function() {
+    //    $.get('cmd.php?q=search&p[]=' + $('.search', this).val(), function(data) {
+    //        console.log(data);
+    //    });
+    //});
     
 });
